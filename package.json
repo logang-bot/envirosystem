@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/logang-bot/envirosystem/issues"
   },
-  "homepage": "https://github.com/logang-bot/envirosystem#readme"
+  "homepage": "https://github.com/logang-bot/envirosystem#readme",
+  "dependencies": {
+    "mongoose": "^5.11.6"
+  }
 }
