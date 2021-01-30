@@ -5,15 +5,15 @@ const bcrypt = require("bcryptjs");
 const userSchema = new Schema({
   name: {
     type: String,
-    required: true,
+    // required: true,
   },
   lastnameF: {
     type: String,
-    required: true,
+    // required: true,
   },
   lastnameM: {
     type: String,
-    required: true,
+    // required: true,
   },
   email: {
     type: String,
@@ -21,7 +21,7 @@ const userSchema = new Schema({
   },
   charge: {
     type: String,
-    required: true,
+    // required: true,
   },
   password: {
     type: String,
@@ -33,15 +33,15 @@ const userSchema = new Schema({
   },
   phone: {
     type: String,
-    required: true,
+    // required: true,
   },
   ci: {
     type: String,
-    required: true,
+    // required: true,
   },
   address: {
     type: String,
-    required: true,
+    // required: true
   },
 });
 

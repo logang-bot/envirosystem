@@ -21,7 +21,6 @@ ctrl.signUp = async (req, res) => {
       res.status(500).json({ message: "este correo ya esta registrado" });
     } else {
       const newUser = new user({ username, email, password });
-      newUser.password = await newUser.encryptPass(password);
       await newUser.save();
       res.status(200).json({ message: "estas registrado" });
       console.log(newUser);
