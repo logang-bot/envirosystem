@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/logang-bot/envirosystem#readme",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "express": "^4.17.1",
     "mongoose": "^5.11.6"
   }
 }
