@@ -28,4 +28,88 @@ ctrl.signUp = async (req, res) => {
   }
 };
 
+ctrl.updateUser = async (req, res) => {
+  const {
+    name,
+    lastnameF,
+    lastmaneM,
+    email,
+    charge,
+    username,
+    phone,
+    ci,
+    address,
+    //confirm_password,
+  } = req.body;
+  const idUser = req.params.id;
+
+  if (email) {
+    const usermail = await user.findOne({ email: email });
+    console.log(usermail);
+
+    if (usermail) {
+      if (usermail.id != req.params.id) {
+        console.log("email en uso");
+        return res.send({ message: "Error: El email ya esta en uso" });
+      }
+    }
+  }
+
+  if (!/\w+\@\w+\.\w{2,3}/.test(email)) {
+    console.log("el email no es valido");
+    return res.send({ message: "Email no valido" });
+  }
+
+  if (password != confirm_password) {
+    console.log("Password incorrecto");
+    return res.send({ message: "Password incorrecto" });
+  }
+
+  const errors = [];
+
+  //if (!name) errors.push("el nombre esta vacio");
+  //if (!lastnameF) errors.push("el apellido paterno esta vacio");
+  //if (!lastmaneM) errors.push("el apellido materno esta vacio");
+  if (!email) {
+    errors.push("el email esta vacio");
+  }
+  //if (!charge) errors.push("el cargo esta vacio");
+  if (!username) {
+    errors.push("el usuario esta vacio");
+  }
+  //if (!phone) errors.push("el telefono esta vacio");
+  //if (!ci) errors.push("el CI esta vacio");
+  //if (!address) errors.push("la direccion esta vacia");
+  if (errors.length > 0) {
+    console.log(errors);
+    return res.send({ message: "Existen campos vacion" });
+  }
+  const userEdit = new user({
+    //name,
+    //lastnameF,
+    //lastnameM,
+    email,
+    //charge,
+    username,
+    //phone,
+    //ci,
+    //address,
+    //confirm_password,
+  });
+  await user.findByIdAndUpdate(userId, { email, username });
+  res.send("Actualizado correctamente");
+};
+
+ctrl.updateUserPass = async (req, res) => {
+  const { password, confirm_password } = req.body;
+  const userId = req.params.id;
+  if (confirm_password != password) {
+    console.log("Password incorrecto");
+    return res.send({ message: "El password es incorrecto" });
+  } else {
+    await user.findByIdAndUpdate(userId, { password });
+    res.send("Password actualizado");
+  }
+};
+
 module.exports = ctrl;
