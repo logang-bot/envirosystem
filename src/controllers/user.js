@@ -1,6 +1,7 @@
 "use strict";
 
 const { user } = require("../models");
+const passport = require("passport");
 const ctrl = {};
 
 ctrl.signUp = async (req, res) => {
@@ -21,6 +22,7 @@ ctrl.signUp = async (req, res) => {
       res.status(500).json({ message: "este correo ya esta registrado" });
     } else {
       const newUser = new user({ username, email, password });
+      newUser.password = await newUser.encryptPass(password);
       await newUser.save();
       res.status(200).json({ message: "estas registrado" });
       console.log(newUser);
@@ -60,10 +62,10 @@ ctrl.updateUser = async (req, res) => {
     return res.send({ message: "Email no valido" });
   }
 
-  if (password != confirm_password) {
+  /*if (password != confirm_password) {
     console.log("Password incorrecto");
     return res.send({ message: "Password incorrecto" });
-  }
+  }*/
 
   const errors = [];
 
@@ -83,33 +85,43 @@ ctrl.updateUser = async (req, res) => {
   if (errors.length > 0) {
     console.log(errors);
     return res.send({ message: "Existen campos vacion" });
+  } else {
+    /*const userEdit = new user({
+      //name,
+      //lastnameF,
+      //lastnameM,
+      email,
+      //charge,
+      username,
+      //phone,
+      //ci,
+      //address,
+      //confirm_password,
+    });*/
+    console.log(req.user.id);
+    await user.findByIdAndUpdate(req.user.id, { email, username });
+    res.send("Actualizado correctamente");
   }
-  const userEdit = new user({
-    //name,
-    //lastnameF,
-    //lastnameM,
-    email,
-    //charge,
-    username,
-    //phone,
-    //ci,
-    //address,
-    //confirm_password,
-  });
-  await user.findByIdAndUpdate(userId, { email, username });
-  res.send("Actualizado correctamente");
 };
 
 ctrl.updateUserPass = async (req, res) => {
   const { password, confirm_password } = req.body;
-  const userId = req.params.id;
+  const userId = req.user.id;
   if (confirm_password != password) {
     console.log("Password incorrecto");
     return res.send({ message: "El password es incorrecto" });
   } else {
-    await user.findByIdAndUpdate(userId, { password });
-    res.send("Password actualizado");
+    const auxPass = new user({ password });
+    //password = auxPass.encryptPass(password);
+    await user.findByIdAndUpdate(userId, {
+      password: await auxPass.encryptPass(password),
+    });
+    return res.send("Password actualizado");
   }
 };
+ctrl.login = passport.authenticate("local", {
+  successRedirect: "/default",
+  failureRedirect: "/",
+});
 
 module.exports = ctrl;
