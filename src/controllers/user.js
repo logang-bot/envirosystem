@@ -1,6 +1,7 @@
 "use strict";
 
 const { user } = require("../models");
+const passport = require("passport"); 
 const ctrl = {};
 
 ctrl.signUp = async (req, res) => {
@@ -20,12 +21,19 @@ ctrl.signUp = async (req, res) => {
     if (emailUser) {
       res.status(500).json({ message: "este correo ya esta registrado" });
     } else {
+
       const newUser = new user({ username, email, password });
+      newUser.password = await newUser.encryptPass(password);
       await newUser.save();
       res.status(200).json({ message: "estas registrado" });
       console.log(newUser);
     }
   }
 };
+
+ctrl.login = passport.authenticate('local',{
+  successRedirect: '/default',
+  failureRedirect: '/',
+})
 
 module.exports = ctrl;
