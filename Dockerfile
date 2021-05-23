@@ -8,3 +8,4 @@ RUN npm install express --quiet
 COPY . .
 EXPOSE 8000
 CMD nodemon -L --watch . app.js
+# adding typescript
