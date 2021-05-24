@@ -9,3 +9,4 @@ COPY . .
 EXPOSE 8000
 CMD nodemon -L --watch . app.js
 # adding typescript
+# deprecated
